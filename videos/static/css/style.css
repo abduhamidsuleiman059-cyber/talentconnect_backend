@@ -1,0 +1,1450 @@
+/* ===================== RESET ===================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===================== BODY ===================== */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #111;
+    color: #fff;
+}
+
+/* ===================== HEADER ===================== */
+header {
+    background-color: #222;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.logo-container img {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.logo-container h1 {
+    color: #00ffff;
+    font-size: 1.8em;
+}
+
+/* ===================== NAVBAR ===================== */
+
+nav {
+    background: linear-gradient(90deg, #6a11cb, #2575fc); /* gradient ya kisasa */
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* nafasi kati ya links */
+    padding: 15px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Hover effect */
+nav a::after {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #fff;
+    transition: width 0.3s ease;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+nav a:hover {
+    color: #ffeb3b; /* yellow highlight wakati wa hover */
+    transform: scale(1.1);
+}
+
+/* ===================== HERO ===================== */
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.hero h1 {
+    color: #00ffff;
+    font-size: 2.5em;
+}
+
+.hero p {
+    max-width: 600px;
+    margin: 20px auto;
+    line-height: 1.6;
+}
+
+.btn {
+    background-color: orange;
+    color: #000;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* ===================== CTA BUTTONS ===================== */
+.cta-button {
+    display: inline-block;
+    padding: 16px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    border: none;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.cta-button.cta-primary {
+    background: linear-gradient(135deg, #00d3ff, #ff5cc8);
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.cta-button.cta-primary:hover {
+    filter: brightness(1.1);
+}
+
+/* PAGE CONTENT */
+.page-content {
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: auto;
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+}
+
+body.contact-page .page-content {
+    overflow: visible;
+}
+
+.page-content h1 {
+    color: #00ffff;
+    margin-bottom: 20px;
+}
+
+.page-content p {
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* ===================== ABOUT ===================== */
+.about {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.about h2 {
+    color: #00ffff;
+    margin-bottom: 20px;
+}
+
+.about p {
+    max-width: 600px;
+    margin: auto;
+    line-height: 1.6;
+}
+
+/* ===================== CARDS ===================== */
+.cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 40px;
+}
+
+.card {
+    width: 250px;
+    background-color: #222;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    text-align: center;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.card-content h3 {
+    color: #00ffff;
+    margin-bottom: 10px;
+}
+
+.card-content p {
+    margin-bottom: 15px;
+}
+
+.card-content button {
+    background-color: orange;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* ===================== IMPORTANCE ===================== */
+.importance {
+    background-color: #333;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.importance h2 {
+    color: #00ffff;
+    margin-bottom: 20px;
+}
+
+.importance ul {
+    list-style: none;
+}
+
+.importance li {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.importance blockquote {
+    margin-top: 20px;
+    font-style: italic;
+    color: orange;
+}
+
+/* ===================== VIDEO FEED ===================== */
+
+/* ===== GENERAL RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body.Entertainment-page {
+  font-family: Arial, sans-serif;
+  background: #000;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  height: 100vh;
+}
+
+/* ===== HEADER ===== */
+body.Entertainment-page header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.Entertainment-page header .logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.Entertainment-page header img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+body.Entertainment-page header h1 {
+  font-size: 18px;
+  color: #fff;
+  margin-left: 10px;
+}
+
+/* ===== NAVBAR ===== */
+body.Entertainment-page nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 0;
+}
+
+body.Entertainment-page nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  transition: background 0.3s;
+}
+
+body.Entertainment-page nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== VIDEO FEED ===== */
+body.Entertainment-page .feed {
+  margin-top: 60px; /* Space for fixed header */
+  margin-bottom: 60px; /* Space for fixed nav */
+  height: calc(100vh - 120px);
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none; /* Firefox */
+}
+
+body.Entertainment-page .feed::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+body.Entertainment-page .video-post {
+  height: 100%;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+body.Entertainment-page .video-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+body.Entertainment-page .video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+body.Entertainment-page .video-info {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 80px; /* Leave space for actions */
+  color: #fff;
+  z-index: 10;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  padding: 20px;
+  border-radius: 10px;
+}
+
+body.Entertainment-page .video-info h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+body.Entertainment-page .video-info p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+body.Entertainment-page .action-btn {
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+body.Entertainment-page .action-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  body.Entertainment-page .video-container {
+    max-width: 100%;
+    border-radius: 0;
+  }
+
+  body.Entertainment-page .video-container video {
+    border-radius: 0;
+  }
+
+  body.Entertainment-page .video-actions {
+    right: 10px;
+    bottom: 80px;
+  }
+
+  body.Entertainment-page .action-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  body.Entertainment-page .video-info {
+    left: 10px;
+    right: 70px;
+    padding: 15px;
+  }
+
+  body.Entertainment-page .video-info h3 {
+    font-size: 16px;
+  }
+
+  body.Entertainment-page .video-info p {
+    font-size: 12px;
+  }
+}
+
+/* ===================== CONTACT FORM ===================== */
+form {
+    background-color: #222;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #00ffff;
+    font-weight: bold;
+}
+
+form input,
+form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 6px;
+    background: #333;
+    color: #fff;
+}
+
+form button {
+    width: 100%;
+    padding: 12px;
+    background-color: orange;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+form button:hover {
+    background-color: #ffcc00;
+}
+
+/* ===================== UPLOAD PAGE (DESIGNER) ===================== */
+body.upload-page {
+  background: #000; /* black background */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body.upload-page header {
+  margin: 20px 0;
+  text-align: center;
+}
+
+body.upload-page header .logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+body.upload-page header img {
+  width: 50px;
+  height: 50px;
+}
+
+body.upload-page header h1 {
+  color: #fff;
+  font-size: 24px;
+}
+
+body.upload-page nav {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  margin-bottom: 30px;
+  display: flex;
+  gap: 20px;
+  padding: 10px 20px;
+}
+
+body.upload-page nav a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+body.upload-page nav a:hover {
+  color: #ffd700;
+}
+
+body.upload-page .upload-container {
+  background: #111; /* dark grey for contrast */
+  padding: 30px;
+  border-radius: 12px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(255,255,255,0.1);
+}
+
+body.upload-page .upload-container h1 {
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+body.upload-page .upload-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+body.upload-page .upload-container input {
+  padding: 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  outline: none;
+  background: #222;
+  color: #fff;
+  transition: 0.3s;
+}
+
+body.upload-page .upload-container input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74,144,226,0.5);
+}
+
+body.upload-page .upload-container textarea {
+  padding: 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  outline: none;
+  background: #222;
+  color: #fff;
+  transition: 0.3s;
+  resize: vertical;
+  min-height: 100px;
+}
+
+body.upload-page .upload-container textarea:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74,144,226,0.5);
+}
+
+body.upload-page .upload-container input[type="file"] {
+  padding: 10px;
+}
+
+body.upload-page .upload-container button {
+  padding: 12px;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+body.upload-page .upload-container button:hover {
+  background: #9013fe;
+}
+
+body.upload-page footer {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+/* ===================== FOOTER ===================== */
+footer {
+    background-color: #222;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+}
+.sidebar {
+    width: 220px;
+    background-color: #000;
+    height: 100vh;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.sidebar h2 {
+    color: #00ffff;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    display: block;
+    padding: 10px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.sidebar ul li a:hover {
+    background-color: orange;
+    color: #000;
+    top: 130px;
+    z-index: 1000;
+}
+.cards-container{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:15px;
+}
+
+.card{
+    background:#222;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+    color:#fff;
+    box-shadow:0 5px 15px rgba(0,0,0,0.4);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    background:#2a2a2a;
+}
+
+.card h3{
+    color:#00ffff;
+    margin-bottom:8px;
+}
+.card{
+    background:#222;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+    color:#fff;
+    box-shadow:0 5px 15px rgba(0,0,0,0.4);
+    border:1px solid rgba(255,255,255,0.05);
+    transition:0.3s;
+}
+.main-content {
+    margin-left: 240px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content{
+    flex: 1;
+}
+
+.main-content h1,
+.main-content p {
+    text-align: center;
+}
+.body.Admin-page {
+    overflow-x: hidden;
+}
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body.Entertainment-page {
+  font-family: Arial, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* ===== HEADER ===== */
+header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: #111;
+  border-bottom: 1px solid #333;
+}
+
+header img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+header h1 {
+  font-size: 18px;
+  color: #fff;
+}
+
+/* ===== Entertainment */
+.video-post {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 9 / 16; /* 👈 hii ndio secret */
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: black;
+}
+.video-post {
+  width: 360px;   /* 👈 USITUMIE 100% tena */
+  height: 540px;  /* 👈 HII NDIO RATIO YA TIKTOK */
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: black;
+}
+/* Hakikisha body haina nafasi za ziada pembeni */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #121212; /* Rangi ya giza kama TikTok */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Inajaza urefu wote wa kioo */
+}
+.action-btn {
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: white;
+  font-size: 22px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.action-btn:hover {
+  background: #ff2c55; /* TikTok red */
+}
+.action-btn.liked {
+  color: #ff2c55;
+}
+
+.video-container {
+    width: 100%;
+    max-width: 400px; /* Inafanya picha isizidi upana wa simu/TikTok */
+    height: 80vh; /* Inampa urefu mzuri */
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px; /* Pembe ziwe na mduara kidogo */
+    overflow: hidden; /* Inaondoa vitu vinavyochomoza nje */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+}
+.video-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+}
+.video-container video {
+  width: 100%;
+  height: 80%;
+  object-fit: cover; /* muhimu sana */
+  border-radius: 10px;
+}
+.video-actions {
+  position: absolute;
+  right: 10px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 2;
+}
+.video-feed {
+  height: 80vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+}
+.video-container {
+  position: relative;
+  height: 80%;
+  width: 100%;
+  scroll-snap-align: start;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.video-container video {
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.actions {
+  position: absolute;
+  right: 20px;
+  bottom: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.actions button {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #fff;
+  transition: transform 0.2s;
+}
+
+.actions button:hover {
+  transform: scale(1.2);
+  color: #ff0050;
+}
+.video-actions {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%); /* katikati vertical */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.video-actions button {
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: white;
+  font-size: 22px;
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Inaficha scrollbar kwenye Chrome, Safari na Opera */
+.video-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Inaficha scrollbar kwenye IE, Edge na Firefox */
+.video-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.main-wrapper {
+    height: 100vh; /* Urefu wa kioo chote */
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory; /* Hii ndiyo inaleta ile snap ya TikTok */
+}
+
+.video-section {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scroll-snap-align: start; /* Video inajipanga mwanzo wa kioo */
+}
+
+.video-frame {
+    width: 100%;
+    max-width: 450px; /* Muundo wa simu */
+    height: 90%; /* Inaacha nafasi kidogo juu na chini kwa ajili ya menu */
+    background-color: #000;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.video-frame video, .video-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* HII NI MUHIMU: Inafanya video ifiti bila kuacha nafasi */
+}
+
+
+/* 2. Rekebisha container ya video */
+.video-container {
+    width: 100%;
+    height: 100vh; /* Inajaza urefu wote wa kioo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+}
+
+/* 3. Fanya video ijae vizuri (Hii ndio sehemu muhimu) */
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Inafanya video ijae frame nzima bila kuacha nafasi */
+}
+
+/* 4. Kuruhusu ku-scroll video moja baada ya nyingine (Feed) */
+.feed {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory; /* Inaleta ile snap ya TikTok */
+    scrollbar-width: none; /* Inaficha scrollbar Firefox */
+}
+
+.feed::-webkit-scrollbar {
+    display: none; /* Inaficha scrollbar Chrome/Safari */
+}
+
+.video-post {
+    height: 100vh;
+    scroll-snap-align: start;
+}
+.video-post {
+    position: relative; /* Hii inaruhusu vitu vya ndani kupangwa popote */
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    margin: auto;
+    overflow: hidden;
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 9/16;
+}
+/* Container ya buttons na profile pic */
+.actions {
+    position: absolute;
+    right: 15px; /* Inasogeza kulia kabisa */
+    bottom: 100px; /* Inazipandisha juu kidogo kutoka chini */
+    display: flex;
+    flex-direction: column; /* Inazipanga kwenda chini (vertical) */
+    align-items: center;
+    gap: 20px; /* Nafasi kati ya button na button */
+    z-index: 10; /* Inahakikisha zinakaa mbele ya video */
+}
+  
+
+/* Style ya Buttons (Like, Comment, Share) */
+.actions button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 25px; /* Ukubwa wa icon */
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+button {
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+.upload-form {
+  font-family: Arial, sans-serif;
+  background: #726b6b;
+}
+
+/* Center form */
+.upload-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+/* Form box */
+.upload-form {
+  width: 100%;
+  max-width: 420px;
+  background: rgb(90, 86, 86);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+/* Form elements */
+.upload-form label {
+  color: #fff;
+  font-weight: bold;
+}
+.body{
+    background-color: #000; /* Black background */
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff; /* White text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+form {
+    background: rgba(20, 20, 20, 0.9); /* Slightly lighter black box */
+    padding: 30px;
+    border-radius: 12px;
+    width: 350px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+input[type="text"],
+textarea,
+input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    background: #111;
+    color: #fff;
+    outline: none;
+    transition: 0.3s;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+input[type="file"]:focus {
+    background: #222;
+    box-shadow: 0 0 8px #ff4081; /* Pink glow */
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #ff4081, #ff9100);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 12px #ff4081;
+}
+
+
+/* ===================== LOGIN & REGISTER FORM ===================== */
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Body */
+body.login-page {
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-bottom: 40px;
+}
+
+/* Header */
+header {
+  margin: 20px 0;
+  text-align: center;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+header .logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+header img {
+  width: 50px;
+  height: 50px;
+}
+
+header h1 {
+  color: #fff;
+  font-size: 24px;
+}
+
+/* Navbar */
+nav {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  border-radius: 12px;
+  margin: 20px auto 30px;
+  max-width: 1100px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 12px 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+  z-index: 100;
+  visibility: visible;
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+nav a:hover {
+  color: #ffd700;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+nav a.active,
+nav a:focus {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Form Container */
+.form-container {
+  background: #111; /* dark grey for contrast */
+  padding: 30px;
+  border-radius: 12px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(255,255,255,0.1);
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-container label {
+  color: #fff;
+  text-align: left;
+  font-weight: 500;
+}
+
+.form-container input {
+  padding: 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  outline: none;
+  background: #222;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.form-container input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74,144,226,0.5);
+}
+
+.form-container textarea {
+  padding: 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  outline: none;
+  background: #222;
+  color: #fff;
+  transition: 0.3s;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-container textarea:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74,144,226,0.5);
+}
+
+.form-container button {
+  padding: 12px;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.form-container button:hover {
+  background: #9013fe;
+}
+
+.form-container p {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.form-container a {
+  color: #4a90e2;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form-container a:hover {
+  text-decoration: underline;
+}
+
+/* Body for Register Page */
+body.register-page {
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-bottom: 40px;
+}
+
+/* Header for Register Page */
+body.register-page header {
+  margin: 20px 0;
+  text-align: center;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+body.register-page header .logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+body.register-page header img {
+  width: 50px;
+  height: 50px;
+}
+
+body.register-page header h1 {
+  color: #fff;
+  font-size: 24px;
+}
+
+/* Navbar for Register Page */
+body.register-page nav {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  border-radius: 12px;
+  margin: 0 auto 30px;
+  max-width: 1100px;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 12px 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+  z-index: 100;
+  visibility: visible;
+}
+
+body.register-page nav a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+body.register-page nav a:hover {
+  color: #ffd700;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.register-page nav a.active,
+body.register-page nav a:focus {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Body for Contact Page */
+body.contact-page {
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-bottom: 40px;
+}
+
+/* Header for Contact Page */
+body.contact-page header {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  padding: 20px 0;
+  flex-shrink: 0;
+}
+
+body.contact-page header .logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+body.contact-page header img {
+  width: 50px;
+  height: 50px;
+}
+
+body.contact-page header h1 {
+  color: #fff;
+  font-size: 24px;
+}
+
+/* Navbar for Contact Page */
+body.contact-page nav {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  border-radius: 12px;
+  margin: 0 auto 30px;
+  max-width: 1100px;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 12px 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+  z-index: 100;
+  visibility: visible;
+}
+
+body.contact-page nav a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+body.contact-page nav a:hover {
+  color: #ffd700;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.contact-page nav a.active,
+body.contact-page nav a:focus {
+  background: rgba(255, 255, 255, 0.15);
+}

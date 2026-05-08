@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TalentConnect</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="logo-container">
+            <img src="{% static 'images/logo.png' %}" alt="Logo">
+            <h1>TalentConnect</h1>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+    <nav>
+
+    <a href="{% url 'home' %}">Home</a>
+
+    <a href="{% url 'discover' %}">Discover</a>
+
+    <a href="{% url 'upload' %}">Upload</a>
+
+    <a href="{% url 'contact' %}">Contact</a>
+
+    <a href="{% url 'entertainment' %}">Entertainment</a>
+
+    <a href="{% url 'login' %}">Login</a>
+
+    <a href="{% url 'register' %}">Register</a>
+
+</nav>
+
+    <!-- HERO SECTION -->
+    <div class="hero">
+        <h1>Showcase Your Talent to the World</h1>
+        <p>
+            TalentConnect is a platform that helps talented people like singers, dancers,
+            and artists to be discovered and appreciated.
+        </p>
+        <a href="{% url 'upload' %}" class="cta-button cta-primary">Upload Your Talent</a>
+        </div>
+
+    <!-- ABOUT SECTION -->
+    <div class="about">
+        <h2>Why TalentConnect?</h2>
+        <p>
+            Many talented individuals struggle to get visibility. This platform solves that
+            problem by giving them a place to showcase their skills.
+        </p>
+    </div>
+
+    <!-- TALENT CARDS -->
+<div class="cards-container">
+    <div class="card">
+        <img src="{% static 'images/singer.jpg' %}" alt="Singer">
+        <div class="card-content">
+            <h3>Singer</h3>
+            <button>View Talent</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="{% static 'images/dancer.jpg' %}" alt="Dancer">
+        <div class="card-content">
+            <h3>Dancer</h3>
+            <button>View Talent</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="{% static 'images/painter.jpg' %}" alt="painter">
+        <div class="card-content">
+            <h3>Painter</h3>
+            <button>View Talent</button>
+        </div>
+    </div>
+</div>
+
+    <!-- IMPORTANCE SECTION -->
+    <div class="importance">
+        <h2>The Importance of This Platform</h2>
+        <ul>
+            <li><strong>Empowering Talent:</strong> Helping individuals nurture and develop their unique skills.</li>
+            <li><strong>Pure Entertainment:</strong> Providing engaging content and fun for our community.</li>
+            <li><strong>Youth Employment:</strong> Creating job opportunities and career paths for young people.</li>
+        </ul>
+        <blockquote>
+            "Your talent is your capital..."  
+            <br>Everyone is welcome!
+        </blockquote>
+    </div><br><br>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 TalentConnect. All rights reserved.</p>
+    </footer><br>
+    <script src="/Js/script.js"></script>
+</body>
+</html>
