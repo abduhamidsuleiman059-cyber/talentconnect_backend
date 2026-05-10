@@ -1,8 +1,32 @@
-from django.shortcuts import redirect, render
+import json
+from functools import wraps
+
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Video
-from .forms import ContactForm, CustomUserCreationForm
+from django.contrib.auth.models import User
+from django.db.models import BooleanField, Count, Exists, OuterRef, Value
+from django.db.models import F
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_GET, require_POST
+from django.urls import reverse
+
+from .forms import ContactForm, CustomUserCreationForm, VideoUploadForm
+from .models import CreatorFollow, UserProfile, Video, VideoComment, VideoLike
+
+
+def api_login_required(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return JsonResponse(
+                {'error': 'Authentication required', 'login_required': True},
+                status=401,
+            )
+        return view_func(request, *args, **kwargs)
+
+    return wrapper
 
 
 def home(request):
@@ -13,21 +37,32 @@ def discover(request):
     return render(request, 'discover.html')
 
 
+@login_required
 def upload_view(request):
     if request.method == 'POST':
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-        video = request.FILES.get('video')
+        form = VideoUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            card_logo = form.cleaned_data.get('card_logo')
+            desc = (form.cleaned_data.get('description') or '').strip()
+            Video.objects.create(
+                user=request.user,
+                title=form.cleaned_data['title'].strip(),
+                description=desc or None,
+                card_display_name=(form.cleaned_data.get('card_display_name') or '').strip(),
+                card_logo=card_logo,
+                video_file=form.cleaned_data['video'],
+            )
+            if card_logo:
+                profile, _ = UserProfile.objects.get_or_create(user=request.user)
+                profile.avatar = card_logo
+                profile.save(update_fields=['avatar'])
+            return redirect('entertainment')
+    else:
+        form = VideoUploadForm()
 
-        Video.objects.create(
-            title=title,
-            description=description,
-            video_file=video
-        )
+    return render(request, 'upload.html', {'form': form})
 
-        return redirect('entertainment')
 
-    return render(request, 'upload.html')
 
 
 def contact(request):
@@ -43,35 +78,136 @@ def contact(request):
 
 
 def entertainment(request):
-    videos = Video.objects.all().order_by('-created_at')
-    return render(request, 'entertainment.html', {'videos': videos})
+    base = Video.objects.select_related('user')
+
+    if request.user.is_authenticated:
+        videos = base.annotate(
+            like_count=Count('likes', distinct=True),
+            comment_count=Count('comments', distinct=True),
+            is_liked=Exists(
+                VideoLike.objects.filter(video=OuterRef('pk'), user=request.user)
+            ),
+            is_following=Exists(
+                CreatorFollow.objects.filter(
+                    following=OuterRef('user_id'),
+                    follower=request.user,
+                )
+            ),
+        ).order_by('-created_at')
+    else:
+        videos = base.annotate(
+            like_count=Count('likes', distinct=True),
+            comment_count=Count('comments', distinct=True),
+            is_liked=Value(False, output_field=BooleanField()),
+            is_following=Value(False, output_field=BooleanField()),
+        ).order_by('-created_at')
+
+    scroll_to = request.GET.get('v')
+    return render(
+        request,
+        'Entertainment.html',
+        {
+            'videos': videos,
+            'scroll_to_video_id': scroll_to,
+        },
+    )
 
 
-def login_view(request):
-    form = AuthenticationForm(request, data=request.POST or None)
+@api_login_required
+@require_POST
+def api_toggle_like(request, video_id):
+    video = get_object_or_404(Video, pk=video_id)
+    like, created = VideoLike.objects.get_or_create(user=request.user, video=video)
+    if not created:
+        like.delete()
+        liked = False
+    else:
+        liked = True
+    count = VideoLike.objects.filter(video=video).count()
+    return JsonResponse({'liked': liked, 'like_count': count})
 
-    if request.method == 'POST' and form.is_valid():
-        user = form.get_user()
-        login(request, user)
-        return redirect('home')
 
-    form.fields['username'].widget.attrs.update({'placeholder': 'Username'})
-    form.fields['password'].widget.attrs.update({'placeholder': 'Password'})
+@require_GET
+def api_list_comments(request, video_id):
+    get_object_or_404(Video, pk=video_id)
+    comments = (
+        VideoComment.objects.filter(video_id=video_id)
+        .select_related('user')
+        .order_by('-created_at')
+    )
+    payload = [
+        {
+            'id': c.id,
+            'username': c.user.username,
+            'text': c.text,
+            'created_at': c.created_at.isoformat(),
+        }
+        for c in comments
+    ]
+    return JsonResponse({'comments': payload})
 
-    return render(request, 'login.html', {'form': form})
+
+@api_login_required
+@require_POST
+def api_add_comment(request, video_id):
+    video = get_object_or_404(Video, pk=video_id)
+    try:
+        data = json.loads(request.body.decode() or '{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    text = (data.get('text') or '').strip()
+    if not text:
+        return JsonResponse({'error': 'Comment cannot be empty'}, status=400)
+    comment = VideoComment.objects.create(
+        user=request.user,
+        video=video,
+        text=text[:2000],
+    )
+    return JsonResponse(
+        {
+            'comment': {
+                'id': comment.id,
+                'username': comment.user.username,
+                'text': comment.text,
+                'created_at': comment.created_at.isoformat(),
+            },
+            'comment_count': VideoComment.objects.filter(video=video).count(),
+        }
+    )
 
 
-def register(request):
-    form = CustomUserCreationForm(request.POST or None)
+@api_login_required
+@require_POST
+def api_toggle_follow(request, user_id):
+    target = get_object_or_404(User, pk=user_id)
+    if target.id == request.user.id:
+        return JsonResponse({'error': 'You cannot follow yourself'}, status=400)
+    rel, created = CreatorFollow.objects.get_or_create(
+        follower=request.user,
+        following=target,
+    )
+    if not created:
+        rel.delete()
+        following = False
+    else:
+        following = True
+    return JsonResponse({'following': following})
 
-    if request.method == 'POST' and form.is_valid():
-        user = form.save()
-        login(request, user)
-        return redirect('home')
 
-    form.fields['username'].widget.attrs.update({'placeholder': 'Username'})
-    form.fields['email'].widget.attrs.update({'placeholder': 'Email'})
-    form.fields['password1'].widget.attrs.update({'placeholder': 'Password'})
-    form.fields['password2'].widget.attrs.update({'placeholder': 'Confirm Password'})
-
-    return render(request, 'register.html', {'form': form})
+@require_POST
+def api_record_view(request, video_id):
+    get_object_or_404(Video, pk=video_id)
+    key = 'viewed_video_ids'
+    viewed = request.session.get(key, [])
+    vid_key = str(video_id)
+    if vid_key in viewed:
+        video = Video.objects.get(pk=video_id)
+        return JsonResponse(
+            {'incremented': False, 'view_count': video.view_count},
+        )
+    viewed = list(viewed) + [vid_key]
+    request.session[key] = viewed
+    request.session.modified = True
+    Video.objects.filter(pk=video_id).update(view_count=F('view_count') + 1)
+    video = Video.objects.get(pk=video_id)
+    return JsonResponse({'incremented': True, 'view_count': video.view_count})

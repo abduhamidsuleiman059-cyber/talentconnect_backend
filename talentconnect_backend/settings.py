@@ -1,3 +1,4 @@
+
 """
 Django settings for talentconnect_backend project.
 
@@ -26,6 +27,8 @@ SECRET_KEY = 'django-insecure-&^+kxdfr!$xjyq6#$z_gj#fyje9w!#n+hv75+)8u_vl%rz^a-o
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+LOGIN_URL = '/login/'
 
 
 # Application definition
@@ -121,7 +124,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-import os
+import ssl
+import certifi # type: ignore
+
+ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
+
+from pathlib import Path
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -129,3 +137,12 @@ MEDIA_ROOT = BASE_DIR / 'media'
 STATICFILES_DIRS = [
     BASE_DIR / "videos/static",
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_SSL = False
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'abduhamidsuleiman059@gmail.com'
+EMAIL_HOST_PASSWORD = 'txum gdxq yuwc wwns'

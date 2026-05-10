@@ -3,11 +3,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token }}">
   <title>⏯Entertainment - TalentConnect</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="Entertainment-page">
+<body
+  class="Entertainment-page"
+  data-scroll-to="{{ scroll_to_video_id|default:'' }}"
+  data-auth="{% if user.is_authenticated %}1{% else %}0{% endif %}"
+  data-login-url="{% url 'login' %}"
+>
 
   <!-- HEADER -->
   <header>
@@ -36,38 +43,118 @@
 
 </nav>
 
- {% load static %}
-
 <div class="feed">
 
     {% for video in videos %}
 
-    <div class="video-post">
+    <div
+      class="video-post"
+      id="video-{{ video.id }}"
+      data-video-id="{{ video.id }}"
+      data-creator-id="{{ video.user.id }}"
+    >
 
         <div class="video-container">
 
-            <video autoplay loop playsinline controls>
+            <div class="video-media-wrap">
+              <video
+                class="feed-video"
+                playsinline
+                loop
+                preload="metadata"
+                controls
+                data-video-id="{{ video.id }}"
+              >
                 <source src="{{ video.video_file.url }}" type="video/mp4">
-            </video>
-
-            <div class="video-info">
-                <h3>{{ video.title }}</h3>
-                <p>{{ video.description }}</p>
+              </video>
             </div>
 
-            <div class="video-actions">
+            <div class="video-info">
+                {% if video.display_handle %}
+                <p class="video-handle">@{{ video.display_handle }}</p>
+                {% endif %}
+                {% if video.title %}
+                <h3 class="video-caption">{{ video.title }}</h3>
+                {% endif %}
+                {% if video.description %}
+                <p class="video-desc">{{ video.description }}</p>
+                {% endif %}
+                <p class="video-views-row">
+                  <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                  <span class="views-count" data-video-id="{{ video.id }}">{{ video.view_count }}</span>
+                  <span> views</span>
+                </p>
+            </div>
 
-                <button class="action-btn">
+            <div class="video-side-rail">
+
+              <div class="creator-block">
+                <div class="profile-wrapper">
+                  <img
+                    class="creator-avatar"
+                    src="{% if video.creator_avatar_url %}{{ video.creator_avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}"
+                    alt="{% if video.display_handle %}{{ video.display_handle }}{% else %}Creator{% endif %}"
+                    width="48"
+                    height="48"
+                  >
+                  {% if not user.is_authenticated or user.id != video.user.id %}
+                  <button
+                    type="button"
+                    class="follow-toggle-btn {% if video.is_following %}is-following{% endif %}"
+                    data-creator-id="{{ video.user.id }}"
+                    data-display-handle="{% if video.display_handle %}{{ video.display_handle }}{% endif %}"
+                    aria-pressed="{% if video.is_following %}true{% else %}false{% endif %}"
+                    aria-label="{% if video.is_following %}Unfollow{% else %}Follow{% endif %} {% if video.display_handle %}{{ video.display_handle }}{% else %}creator{% endif %}"
+                  >
+                    <span class="follow-plus-icon="true">+</span>
+                    <span class="follow-check-icon="true"><i class="fa-solid fa-check"></i></span>
+                    <span class="follow-label">Following</span>
+                  </button>
+                  {% else %}
+                  <!-- Your own video - no follow button -->
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="video-actions">
+
+                <div class="action-stack">
+                  <button
+                    type="button"
+                    class="action-btn action-like {% if video.is_liked %}is-liked{% endif %}"
+                    data-video-id="{{ video.id }}"
+                    aria-label="Like"
+                  >
                     <i class="fa-solid fa-heart"></i>
-                </button>
+                  </button>
+                  <span class="action-count like-count" data-video-id="{{ video.id }}">{{ video.like_count }}</span>
+                </div>
 
-                <button class="action-btn">
+                <div class="action-stack">
+                  <button
+                    type="button"
+                    class="action-btn action-comment"
+                    data-video-id="{{ video.id }}"
+                    aria-label="Comments"
+                  >
                     <i class="fa-solid fa-comment"></i>
-                </button>
+                  </button>
+                  <span class="action-count comment-count" data-video-id="{{ video.id }}">{{ video.comment_count }}</span>
+                </div>
 
-                <button class="action-btn">
+                <div class="action-stack">
+                  <button
+                    type="button"
+                    class="action-btn action-share"
+                    data-video-id="{{ video.id }}"
+                    aria-label="Share"
+                  >
                     <i class="fa-solid fa-share"></i>
-                </button>
+                  </button>
+                  <span class="action-count share-placeholder"></span>
+                </div>
+
+              </div>
 
             </div>
 
@@ -78,7 +165,35 @@
     {% endfor %}
 
 </div>
+
+<div id="tc-comments-modal" class="tc-modal" role="dialog" aria-modal="true" aria-labelledby="tc-comments-title" hidden>
+  <div class="tc-modal-backdrop" data-close-modal></div>
+  <div class="tc-modal-panel">
+    <div class="tc-modal-header">
+      <h2 id="tc-comments-title">Comments</h2>
+      <button type="button" class="tc-modal-close" data-close-modal aria-label="Close">&times;</button>
+    </div>
+    <div id="tc-comments-list" class="tc-comments-list"></div>
+    <form id="tc-comment-form" class="tc-comment-form">
+      <input type="text" id="tc-comment-input" name="text" placeholder="Add a comment..." maxlength="2000" autocomplete="off">
+      <button type="submit" class="tc-comment-send">Post</button>
+    </form>
+    <p id="tc-comment-login-hint" class="tc-hint" hidden>Log in to post comments.</p>
+  </div>
 </div>
-      <script src="/Js/script.js"></script>
+
+<div id="tc-share-popover" class="tc-share-popover" hidden>
+  <button type="button" class="tc-share-item" data-share="whatsapp">
+    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+  </button>
+  <button type="button" class="tc-share-item" data-share="facebook">
+    <i class="fa-brands fa-facebook"></i> Facebook
+  </button>
+  <button type="button" class="tc-share-item" data-share="copy">
+    <i class="fa-solid fa-link"></i> Copy link
+  </button>
+</div>
+
+      <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
