@@ -719,14 +719,21 @@ body.upload-page form textarea {
 body.upload-page .upload-field-label {
   display: block;
   text-align: left;
-  font-size: clamp(0.85rem, 2vw, 0.9rem);
+  font-size: clamp(0.9rem, 2vw, 1rem);
   font-weight: 600;
   color: #9ecbff;
-  margin-bottom: -0.25rem;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
 }
 
 body.upload-page .upload-talent-form {
-  text-align: left;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 body.upload-page .form-errors,
@@ -742,18 +749,6 @@ body.upload-page form input.upload-file {
   cursor: pointer;
 }
 
-body.upload-page form button {
-  width: 100%;
-  margin-top: var(--space-sm);
-  padding: 0.9rem;
-  border: none;
-  border-radius: 0.75rem;
-  background: linear-gradient(45deg, #0066ff, #4da6ff);
-  color: #fff;
-  font-size: clamp(1rem, 2.2vw, 1.125rem);
-  font-weight: bold;
-  cursor: pointer;
-}
 
 /* ===================== ENTERTAINMENT (TikTok feed) ===================== */
 body.Entertainment-page {
@@ -849,7 +844,6 @@ body.Entertainment-page .feed {
   height: calc(100dvh - var(--ent-chrome-total));
   overflow-y: auto;
   overflow-x: hidden;
-  scroll-snap-type: y mandatory;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -862,14 +856,12 @@ body.Entertainment-page .video-post {
   height: calc(100vh - var(--ent-chrome-total));
   height: calc(100dvh - var(--ent-chrome-total));
   min-height: 0;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: var(--space-sm);
+  padding: 0;
   box-sizing: border-box;
   width: 100%;
   max-width: 100vw;
@@ -1018,171 +1010,83 @@ body.Entertainment-page .creator-avatar {
   flex-shrink: 0;
 }
 
-/* ===== Follow Button - TikTok Style (+) ===== */
-body.Entertainment-page .follow-toggle-btn {
-  position: absolute;
-  right: -5%;
-  bottom: -5%;
-  width: clamp(1.25rem, 5vw, 1.5rem);
-  height: clamp(1.25rem, 5vw, 1.5rem);
-  min-width: clamp(1.25rem, 5vw, 1.5rem);
-  min-height: clamp(1.25rem, 5vw, 1.5rem);
-  padding: 0;
+/* Active video debug styles removed */
+
+/* ===== TikTok-Style Follow Button ===== */
+body.Entertainment-page .tiktok-follow-btn {
+  position: relative;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 2px solid #0a0a0a;
-  background: linear-gradient(135deg, #fe2c55, #ff6b7a);
+  background: linear-gradient(135deg, #ff2d55, #ff3366);
+  border: 3px solid #fff;
   color: #fff;
-  font-size: clamp(0.75rem, 2.5vw, 0.9rem);
-  font-weight: 900;
-  line-height: 1;
+  font-size: 22px;
+  font-weight: 800;
   cursor: pointer;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
-    0 4px 12px rgba(254, 44, 85, 0.4),
-    0 2px 8px rgba(0, 0, 0, 0.6),
+    0 6px 16px rgba(255, 45, 85, 0.5),
+    0 3px 6px rgba(0, 0, 0, 0.4),
     inset 0 1px 2px rgba(255, 255, 255, 0.3);
-  transition:
-    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background 0.35s ease,
-    border-color 0.35s ease,
-    box-shadow 0.35s ease;
-  z-index: 20;
-  flex-shrink: 0;
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-body.Entertainment-page .follow-toggle-btn:hover {
-  transform: scale(1.15);
+body.Entertainment-page .tiktok-follow-btn:hover {
+  transform: scale(1.1);
   box-shadow: 
-    0 6px 16px rgba(254, 44, 85, 0.5),
-    0 3px 10px rgba(0, 0, 0, 0.7),
+    0 6px 16px rgba(255, 45, 85, 0.5),
+    0 3px 6px rgba(0, 0, 0, 0.4),
     inset 0 1px 2px rgba(255, 255, 255, 0.4);
 }
 
-body.Entertainment-page .follow-toggle-btn:active {
-  transform: scale(0.92);
+body.Entertainment-page .tiktok-follow-btn:active {
+  transform: translateX(-50%) scale(0.95);
   box-shadow: 
-    0 2px 8px rgba(254, 44, 85, 0.3),
-    0 1px 4px rgba(0, 0, 0, 0.5);
+    0 2px 8px rgba(255, 45, 85, 0.3),
+    0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-body.Entertainment-page .follow-toggle-btn.btn-animating {
-  animation: btnPulse 0.3s ease-out;
+body.Entertainment-page .tiktok-follow-btn.following {
+  background: #333;
+  border: 2px solid #444;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
 }
 
-@keyframes btnPulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-body.Entertainment-page .follow-toggle-btn .follow-plus-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  font-weight: 900;
-  animation: plusAppear 0.3s ease-out;
-}
-
-body.Entertainment-page .follow-toggle-btn .follow-check-icon {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.65rem;
-  animation: checkAppear 0.3s ease-out;
-}
-
-body.Entertainment-page .follow-toggle-btn .follow-label {
-  display: none;
-  font-size: 0.5rem;
-  font-weight: 700;
-  max-width: 3.25rem;
-  white-space: nowrap;
-}
-
-/* ===== Following State ===== */
-body.Entertainment-page .follow-toggle-btn.is-following {
-  width: auto;
-  min-width: clamp(1.25rem, 5vw, 1.5rem);
-  height: clamp(1.25rem, 5vw, 1.5rem);
-  padding: 0 0.4rem;
-  border-radius: 0.75rem;
-  background: linear-gradient(145deg, #3a3a3c, #252526);
-  border-color: rgba(255, 255, 255, 0.35);
-  right: -8%;
-  bottom: -8%;
+body.Entertainment-page .tiktok-follow-btn.following:hover {
+  transform: translateX(-50%) scale(1.05);
   box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.6),
-    inset 0 1px 2px rgba(255, 255, 255, 0.1);
-  gap: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-body.Entertainment-page .follow-toggle-btn.is-following:hover {
-  transform: scale(1.08);
-  box-shadow: 
-    0 3px 10px rgba(0, 0, 0, 0.7),
+    0 3px 10px rgba(0, 0, 0, 0.5),
     inset 0 1px 2px rgba(255, 255, 255, 0.15);
 }
 
-body.Entertainment-page .follow-toggle-btn.is-following .follow-plus-icon {
-  display: none;
-}
-
-body.Entertainment-page .follow-toggle-btn.is-following .follow-check-icon {
+body.Entertainment-page .tiktok-follow-icon {
+  font-size: 18px;
+  font-weight: 900;
   display: flex;
-  color: #0f0;
-  text-shadow: 0 0 4px rgba(0, 255, 0, 0.3);
+  align-items: center;
+  justify-content: center;
+  animation: iconAppear 0.3s ease-out;
 }
 
-/* ===== Animations ===== */
-@keyframes plusAppear {
-  0% {
-    opacity: 0;
-    transform: scale(0.3);
+@keyframes iconAppear {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.5) rotate(-180deg); 
   }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes checkAppear {
-  0% {
-    opacity: 0;
-    transform: scale(0) rotate(-180deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-}
-
-@media (min-width: 400px) {
-  body.Entertainment-page .follow-toggle-btn.is-following {
-    min-width: 4.75rem;
-    min-height: 1.5rem;
-    height: auto;
-    padding: 0.25rem 0.6rem;
-    gap: 0.35rem;
-  }
-
-  body.Entertainment-page .follow-toggle-btn.is-following .follow-label {
-    display: block;
-    font-size: 0.55rem;
-    font-weight: 700;
+  100% { 
+    opacity: 1; 
+    transform: scale(1) rotate(0deg); 
   }
 }
 
@@ -1554,4 +1458,29 @@ body.admin-page {
     padding: 0.25rem 0.3rem;
     font-size: clamp(0.6rem, 2.8vw, 0.75rem);
   }
+}
+.follow-btn{
+    position: absolute;
+    top: 55px;
+    right: -8px;
+
+    width: 24px;
+    height: 24px;
+
+    background: #ff004f;
+    color: white;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    border: 2px solid white;
+    cursor: pointer;
+
+    z-index: 10;
 }

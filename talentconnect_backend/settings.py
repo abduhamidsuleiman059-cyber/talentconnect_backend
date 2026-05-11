@@ -138,11 +138,18 @@ STATICFILES_DIRS = [
     BASE_DIR / "videos/static",
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_SSL = False
 EMAIL_USE_TLS = True
 
+# Email credentials (use environment variables in production)
 EMAIL_HOST_USER = 'abduhamidsuleiman059@gmail.com'
 EMAIL_HOST_PASSWORD = 'txum gdxq yuwc wwns'
+DEFAULT_FROM_EMAIL = 'abduhamidsuleiman059@gmail.com'
+ADMIN_EMAIL = 'abduhamidsuleiman059@gmail.com'
+
+# For development, you can use console backend to test
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

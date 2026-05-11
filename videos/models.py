@@ -14,6 +14,14 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f'Profile for {self.user.username}'
+    
+    @property
+    def followers_count(self):
+        return self.user.follower_relations.count()
+    
+    @property
+    def following_count(self):
+        return self.user.following_relations.count()
 
 
 class Video(models.Model):

@@ -94,6 +94,12 @@ def entertainment(request):
                 )
             ),
         ).order_by('-created_at')
+        
+        # Get user profile for follow counts
+        try:
+            user_profile = request.user.videos_profile
+        except UserProfile.DoesNotExist:
+            user_profile = UserProfile.objects.create(user=request.user)
     else:
         videos = base.annotate(
             like_count=Count('likes', distinct=True),
@@ -101,6 +107,7 @@ def entertainment(request):
             is_liked=Value(False, output_field=BooleanField()),
             is_following=Value(False, output_field=BooleanField()),
         ).order_by('-created_at')
+        user_profile = None
 
     scroll_to = request.GET.get('v')
     return render(
@@ -109,8 +116,40 @@ def entertainment(request):
         {
             'videos': videos,
             'scroll_to_video_id': scroll_to,
+            'user_profile': user_profile,
         },
     )
+
+
+def user_profile(request, username):
+    """View user profile with follow/following counts"""
+    profile_user = get_object_or_404(User, username=username)
+    
+    # Get user profile
+    try:
+        profile_user_profile = profile_user.videos_profile
+    except UserProfile.DoesNotExist:
+        profile_user_profile = UserProfile.objects.create(user=profile_user)
+    
+    # Get user's videos
+    user_videos = Video.objects.filter(user=profile_user).order_by('-created_at')
+    
+    # Check if current user is following this profile user
+    is_following = False
+    if request.user.is_authenticated:
+        is_following = CreatorFollow.objects.filter(
+            follower=request.user,
+            following=profile_user
+        ).exists()
+    
+    context = {
+        'profile_user': profile_user,
+        'profile_user_profile': profile_user_profile,
+        'user_videos': user_videos,
+        'is_following': is_following,
+    }
+    
+    return render(request, 'user_profile.html', context)
 
 
 @api_login_required

@@ -34,21 +34,20 @@
 
     <!-- REGISTER FORM -->
     <div class="form-container">
-        <h2>Create Account</h2>
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            {{ form.username }}
-            {{ form.email }}
-            {{ form.password1 }}
-            {{ form.password2 }}
-            <button type="submit">Register</button>
-        </form>
-        <p>
-            Already have an account?
-            <a href="{% url 'login' %}">Login here</a>
-        </p>
-    </div>
+    <h2>Create Account</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+<input type="text" name="username" placeholder="Username">
+<input type="email" name="email" placeholder="Email">
+<input type="password" name="password1" placeholder="Password">
+<input type="password" name="password2" placeholder="Confirm Password">
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+
     <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

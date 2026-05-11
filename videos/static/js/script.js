@@ -69,14 +69,14 @@
   const loginUrl = body.getAttribute('data-login-url') || '/login/';
 
   const scrollToId = body.getAttribute('data-scroll-to');
-  if (scrollToId) {
-    const el = document.getElementById('video-' + scrollToId.trim());
-    if (el) {
-      requestAnimationFrame(function () {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    }
+if (scrollToId) {
+  const el = document.getElementById('video-' + scrollToId.trim());
+  if (el) {
+    requestAnimationFrame(function () {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   }
+}
 
   const viewedVideos = new Set();
 
@@ -210,65 +210,15 @@
   }
 
   initScrollAutoplay();
-  initAutoScroll();
-
-  function initAutoScroll() {
-    let autoScrollInterval = null;
-    let isAutoScrolling = false;
-    const scrollDelay = 5000; // 5 seconds per video
-    let currentVideoIndex = 0;
-    const videos = document.querySelectorAll('.video-post');
-
-    function scrollToNextVideo() {
-      if (videos.length === 0) return;
-      
-      currentVideoIndex = (currentVideoIndex + 1) % videos.length;
-      const nextVideo = videos[currentVideoIndex];
-      
-      if (nextVideo) {
-        nextVideo.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-
-    function startAutoScroll() {
-      if (autoScrollInterval) return;
-      isAutoScrolling = true;
-      autoScrollInterval = setInterval(scrollToNextVideo, scrollDelay);
-    }
-
-    function stopAutoScroll() {
-      if (autoScrollInterval) {
-        clearInterval(autoScrollInterval);
-        autoScrollInterval = null;
-      }
-      isAutoScrolling = false;
-    }
-
-    // Start auto-scroll when page loads
-    startAutoScroll();
-
-    // Stop auto-scroll on user interaction
-    document.addEventListener('wheel', stopAutoScroll, { passive: true });
-    document.addEventListener('touchstart', stopAutoScroll, { passive: true });
-    document.addEventListener('keydown', function(e) {
-      if (['ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'].includes(e.key)) {
-        stopAutoScroll();
-      }
-    });
-
-    // Resume auto-scroll after 10 seconds of inactivity
-    let inactivityTimer;
-    function resetInactivityTimer() {
-      clearTimeout(inactivityTimer);
-      inactivityTimer = setTimeout(startAutoScroll, 10000);
-    }
-
-    ['wheel', 'touchstart', 'touchmove', 'keydown'].forEach(event => {
-      document.addEventListener(event, resetInactivityTimer, { passive: true });
-    });
-
-    resetInactivityTimer();
+  
+  // Initialize follow buttons only (no auto-scroll)
+  const videos = document.querySelectorAll('.video-post');
+  if (videos.length > 0) {
+    initFollowButtons();
+    initTikTokFollowButtons();
   }
+
+  // Auto-scroll functionality removed - users scroll manually only
 
   /* Likes */
   document.querySelectorAll('.action-like').forEach(function (btn) {
@@ -315,61 +265,94 @@
   }
 
   function applyFollowButtonUI(btn, following) {
-    // Add animation trigger
+    // TikTok-style animation
     btn.classList.add('btn-animating');
+    
+    // Create ripple effect
+    const ripple = document.createElement('span');
+    ripple.classList.add('ripple');
+    btn.appendChild(ripple);
+    
     setTimeout(function() {
       btn.classList.remove('btn-animating');
-    }, 300);
+      if (ripple.parentNode) {
+        ripple.parentNode.removeChild(ripple);
+      }
+    }, 600);
     
+    // Update button state
     btn.classList.toggle('is-following', following);
     btn.setAttribute('aria-pressed', following ? 'true' : 'false');
     var handle = (btn.getAttribute('data-display-handle') || '').trim();
     var who = handle ? ' ' + handle : ' creator';
     btn.setAttribute('aria-label', (following ? 'Unfollow' : 'Follow') + who);
+    
+    // Update button content with animation
+    const plusIcon = btn.querySelector('.follow-plus-icon');
+    const checkIcon = btn.querySelector('.follow-check-icon');
+    const label = btn.querySelector('.follow-label');
+    
+    if (following) {
+      if (plusIcon) plusIcon.style.display = 'none';
+      if (checkIcon) checkIcon.style.display = 'inline';
+      if (label) label.textContent = 'Following';
+    } else {
+      if (plusIcon) plusIcon.style.display = 'inline';
+      if (checkIcon) checkIcon.style.display = 'none';
+      if (label) label.textContent = 'Follow';
+    }
   }
 
-  var followButtons = document.querySelectorAll('.follow-toggle-btn');
-  if (isAuth) {
-    var syncSet = readFollowIdSet();
-    followButtons.forEach(function (b) {
-      var id = b.getAttribute('data-creator-id');
-      if (!id) {
-        return;
-      }
-      if (b.classList.contains('is-following')) {
-        syncSet.add(String(id));
-      } else {
-        syncSet.delete(String(id));
-      }
-    });
-    writeFollowIdSet(syncSet);
-  } else {
-    var guestSet = readFollowIdSet();
-    followButtons.forEach(function (b) {
-      var id2 = b.getAttribute('data-creator-id');
-      if (id2 && guestSet.has(String(id2))) {
-        applyFollowButtonUI(b, true);
-      }
-    });
-  }
-
-  followButtons.forEach(function (btn) {
-    var cid = btn.getAttribute('data-creator-id');
-    if (!cid) {
-      return;
+  // Initialize follow buttons
+  function initFollowButtons() {
+    var followButtons = document.querySelectorAll('.follow-toggle-btn');
+    if (followButtons.length === 0) return;
+    
+    if (isAuth) {
+      var syncSet = readFollowIdSet();
+      followButtons.forEach(function (b) {
+        var id = b.getAttribute('data-creator-id');
+        if (!id) return;
+        
+        // Set initial state
+        var isFollowing = syncSet.has(String(id));
+        if (isFollowing) {
+          b.classList.add('is-following');
+        }
+        
+        if (b.classList.contains('is-following')) {
+          syncSet.add(String(id));
+        } else {
+          syncSet.delete(String(id));
+        }
+      });
+      writeFollowIdSet(syncSet);
+    } else {
+      var guestSet = readFollowIdSet();
+      followButtons.forEach(function (b) {
+        var id2 = b.getAttribute('data-creator-id');
+        if (id2 && guestSet.has(String(id2))) {
+          applyFollowButtonUI(b, true);
+        }
+      });
     }
 
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var creatorId = btn.getAttribute('data-creator-id');
-      var willFollow = !btn.classList.contains('is-following');
+    // Add click handlers
+    followButtons.forEach(function (btn) {
+      var cid = btn.getAttribute('data-creator-id');
+      if (!cid) return;
 
-      if (isAuth) {
-        fetchJson('/api/user/' + creatorId + '/follow/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: '{}',
-        })
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var creatorId = btn.getAttribute('data-creator-id');
+        var willFollow = !btn.classList.contains('is-following');
+
+        if (isAuth) {
+          fetchJson('/api/user/' + creatorId + '/follow/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: '{}',
+          })
           .then(function (data) {
             var on = !!data.following;
             applyFollowButtonUI(btn, on);
@@ -395,18 +378,111 @@
             writeFollowIdSet(s);
             applyFollowButtonUI(btn, willFollow);
           });
-      } else {
-        var s2 = readFollowIdSet();
-        if (willFollow) {
-          s2.add(String(creatorId));
         } else {
-          s2.delete(String(creatorId));
+          var s2 = readFollowIdSet();
+          if (willFollow) {
+            s2.add(String(creatorId));
+          } else {
+            s2.delete(String(creatorId));
+          }
+          writeFollowIdSet(s2);
+          applyFollowButtonUI(btn, willFollow);
         }
-        writeFollowIdSet(s2);
-        applyFollowButtonUI(btn, willFollow);
-      }
+      });
     });
-  });
+  }
+
+  // Initialize TikTok-style follow buttons
+  function initTikTokFollowButtons() {
+    const tiktokButtons = document.querySelectorAll('.tiktok-follow-btn');
+    if (tiktokButtons.length === 0) return;
+    
+    // Set initial state for authenticated users
+    if (isAuth) {
+      const syncSet = readFollowIdSet();
+      tiktokButtons.forEach(function (btn) {
+        const id = btn.getAttribute('data-creator-id');
+        if (!id) return;
+        
+        // Set initial state
+        const isFollowing = syncSet.has(String(id));
+        if (isFollowing) {
+          btn.classList.add('following');
+        }
+      });
+    }
+
+    // Add click handlers
+    tiktokButtons.forEach(function (btn) {
+      const creatorId = btn.getAttribute('data-creator-id');
+      if (!creatorId) return;
+
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const willFollow = !btn.classList.contains('following');
+
+        if (isAuth) {
+          // AJAX follow/unfollow for authenticated users
+          fetchJson('/api/user/' + creatorId + '/follow/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: '{}',
+          })
+          .then(function (data) {
+            const following = !!data.following;
+            applyTikTokFollowUI(btn, following);
+            
+            // Update localStorage
+            const s = readFollowIdSet();
+            if (following) {
+              s.add(String(creatorId));
+            } else {
+              s.delete(String(creatorId));
+            }
+            writeFollowIdSet(s);
+          })
+          .catch(function (err) {
+            if (err.status === 401) {
+              window.location.href = loginUrl;
+              return;
+            }
+            // Fallback for network errors
+            const s = readFollowIdSet();
+            if (willFollow) {
+              s.add(String(creatorId));
+            } else {
+              s.delete(String(creatorId));
+            }
+            writeFollowIdSet(s);
+            applyTikTokFollowUI(btn, willFollow);
+          });
+        } else {
+          // Redirect to login for non-authenticated users
+          window.location.href = loginUrl;
+        }
+      });
+    });
+  }
+
+  function applyTikTokFollowUI(btn, following) {
+    // Add animation
+    btn.style.transform = 'translateX(-50%) scale(0.9)';
+    setTimeout(function() {
+      btn.style.transform = 'translateX(-50%) scale(1)';
+    }, 150);
+    
+    // Update button state
+    btn.classList.toggle('following', following);
+    btn.setAttribute('aria-pressed', following ? 'true' : 'false');
+    
+    const icon = btn.querySelector('.tiktok-follow-icon');
+    
+    if (following) {
+      if (icon) icon.innerHTML = '<i class="fa-solid fa-check"></i>';
+    } else {
+      if (icon) icon.innerHTML = '+';
+    }
+  }
 
   /* Comments modal */
   const commentsModal = document.getElementById('tc-comments-modal');

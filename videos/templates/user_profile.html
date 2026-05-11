@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{{ profile_user.username }} - TalentConnect</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="user-profile-page">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo-container">
+      <img src="{% static 'images/logo.png' %}" alt="Logo">
+      <h1>TalentConnect</h1>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'discover' %}">Discover</a>
+    <a href="{% url 'upload' %}">Upload</a>
+    <a href="{% url 'contact' %}">Contact</a>
+    <a href="{% url 'entertainment' %}">Entertainment</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+      <a href="{% url 'login' %}">Login</a>
+      <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+  </nav>
+
+  <!-- USER PROFILE CONTENT -->
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <img 
+          src="{% if profile_user_profile.avatar %}{{ profile_user_profile.avatar.url }}{% else %}{% static 'images/logo.png' %}{% endif %}" 
+          alt="{{ profile_user.username }}"
+          width="120"
+          height="120"
+        >
+      </div>
+      
+      <div class="profile-info">
+        <h2 class="profile-username">@{{ profile_user.username }}</h2>
+        <div class="profile-stats">
+          <div class="stat-item">
+            <span class="stat-count">{{ profile_user_profile.followers_count }}</span>
+            <span class="stat-label">Followers</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-count">{{ profile_user_profile.following_count }}</span>
+            <span class="stat-label">Following</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-count">{{ user_videos.count }}</span>
+            <span class="stat-label">Videos</span>
+          </div>
+        </div>
+        
+        {% if user.is_authenticated and user.id != profile_user.id %}
+          <button 
+            type="button" 
+            class="follow-btn {% if is_following %}following{% endif %}"
+            data-user-id="{{ profile_user.id }}"
+            data-username="{{ profile_user.username }}"
+          >
+            <span class="follow-text">{% if is_following %}Unfollow{% else %}Follow{% endif %}</span>
+            <span class="follow-icon">
+              {% if is_following %}
+                <i class="fa-solid fa-check"></i>
+              {% else %}
+                <i class="fa-solid fa-plus"></i>
+              {% endif %}
+            </span>
+          </button>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="profile-videos">
+      <h3>Videos by {{ profile_user.username }}</h3>
+      {% if user_videos %}
+        <div class="video-grid">
+          {% for video in user_videos %}
+            <div class="video-card">
+              <div class="video-thumbnail">
+                <video 
+                  class="video-preview"
+                  preload="metadata"
+                  muted
+                  loop
+                >
+                  <source src="{{ video.video_file.url }}" type="video/mp4">
+                </video>
+              </div>
+              <div class="video-info">
+                <h4 class="video-title">{{ video.title }}</h4>
+                <p class="video-views">
+                  <i class="fa-solid fa-eye"></i> {{ video.view_count }} views
+                </p>
+                <p class="video-date">{{ video.created_at|date:"M d, Y" }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="no-videos">No videos yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <script src="{% static 'js/script.js' %}"></script>
+  <script>
+    // Profile page follow functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const followBtn = document.querySelector('.follow-btn');
+      if (!followBtn) return;
+
+      followBtn.addEventListener('click', function() {
+        const userId = this.getAttribute('data-user-id');
+        const username = this.getAttribute('data-username');
+        const isFollowing = this.classList.contains('following');
+
+        fetch(`/api/user/${userId}/follow/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.following !== undefined) {
+            // Update button state
+            if (data.following) {
+              this.classList.add('following');
+              this.querySelector('.follow-text').textContent = 'Unfollow';
+              this.querySelector('.follow-icon').innerHTML = '<i class="fa-solid fa-check"></i>';
+            } else {
+              this.classList.remove('following');
+              this.querySelector('.follow-text').textContent = 'Follow';
+              this.querySelector('.follow-icon').innerHTML = '<i class="fa-solid fa-plus"></i>';
+            }
+            
+            // Update followers count
+            const followersCount = document.querySelector('.stat-item:first-child .stat-count');
+            if (followersCount) {
+              const currentCount = parseInt(followersCount.textContent);
+              followersCount.textContent = data.following ? currentCount + 1 : currentCount - 1;
+            }
+          } else if (data.error) {
+            alert(data.error);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Failed to update follow status. Please try again.');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

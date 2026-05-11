@@ -8,6 +8,7 @@ urlpatterns = [
     path('upload/', views.upload_view, name='upload'),
     path('contact/', views.contact, name='contact'),
     path('entertainment/', views.entertainment, name='entertainment'),
+    path('user/<str:username>/', views.user_profile, name='user_profile'),
     path('api/video/<int:video_id>/like/', views.api_toggle_like, name='api_toggle_like'),
     path(
         'api/video/<int:video_id>/comments/',
