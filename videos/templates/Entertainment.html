@@ -58,15 +58,17 @@
 
             <div class="video-media-wrap">
               <video
-                class="feed-video"
-                playsinline
-                loop
-                preload="metadata"
-                controls
-                data-video-id="{{ video.id }}"
-              >
-                <source src="{{ video.video_file.url }}" type="video/mp4">
-              </video>
+    class="feed-video"
+    controls
+    playsinline
+    webkit-playsinline
+    preload="auto"
+    muted
+>
+    <source src="{{ video.video_file.url }}" type="video/mp4">
+
+    Your browser does not support the video tag.
+</video>
             </div>
 
             <div class="video-info">
@@ -90,13 +92,16 @@
 
               <div class="creator-block">
                 <div class="profile-wrapper">
-                  <img
-                    class="creator-avatar"
-                    src="{% if video.creator_avatar_url %}{{ video.creator_avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}"
-                    alt="{% if video.display_handle %}{{ video.display_handle }}{% else %}Creator{% endif %}"
-                    width="48"
-                    height="38"
-                  >
+                 <img
+  class="creator-avatar"
+  src="{{ video.creator_avatar_url|default:'' }}"
+  alt="{{ video.display_handle|default:'Creator' }}"
+  width="48"
+  height="38"
+  onerror="this.onerror=null;this.src='/static/images/logo.png';"
+/> 
+
+
                   </div>
               </div>
 

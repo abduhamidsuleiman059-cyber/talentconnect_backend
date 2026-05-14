@@ -159,9 +159,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # ======================
 # MEDIA FILES
 # ======================
+import os
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # ======================
 # SSL FIX
@@ -193,4 +194,4 @@ ADMIN_EMAIL = 'abduhamidsuleiman059@gmail.com'
 # DEFAULT AUTO FIELD
 # ======================
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField' 
