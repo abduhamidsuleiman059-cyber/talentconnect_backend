@@ -19,12 +19,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-&^+kxdfr!$xjyq6#$z_gj#fyje9w!#n+hv75+)8u_vl%rz^a-o'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     ".vercel.app",
     "127.0.0.1",
     "localhost",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://localhost:8000",
+    "https://127.0.0.1:8000",
+    "https://talentconnect-backend-etqc.vercel.app",
 ]
 
 # ======================
@@ -32,6 +37,7 @@ ALLOWED_HOSTS = [
 # ======================
 
 LOGIN_URL = '/login/'
+LOGIN_URL = '/accounts/login/'
 
 # ======================
 # INSTALLED APPS
